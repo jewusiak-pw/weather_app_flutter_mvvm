@@ -32,11 +32,6 @@ class DetailsViewModel extends ChangeNotifier {
   DetailsViewModel(this._apiClient, this._selectedCityService);
 
   Future<void> ensureLoading() async {
-    if(_selectedCityService.getKey()!= thisCityKey){
-      thisCityKey = _selectedCityService.getKey()!;
-      await fetchAllData(thisCityKey);
-      return;
-    }
     if(_finishedLoading) return;
     if(!_loading){
       await fetchAllData(_selectedCityService.getKey()!);
@@ -45,7 +40,6 @@ class DetailsViewModel extends ChangeNotifier {
 
   Future fetchAllData(String locationId) async {
     _loading = true;
-    notifyListeners();
     _currentConditions = await _apiClient.fetchCurrentConditions(locationId);
     _dailyForecast = await _apiClient.fetchDailyForecast(locationId);
     _hourlyForecast = await _apiClient.fetchHourlyForecast(locationId);
@@ -59,7 +53,6 @@ class DetailsViewModel extends ChangeNotifier {
   }
 
   void navigatorBackCommand() {
-    cleanup();
     Navigator.pop(GlobalKeyHelper.navigatorKey.currentContext!);
   }
 
@@ -71,7 +64,6 @@ class DetailsViewModel extends ChangeNotifier {
     _airQualityIndexForecast = null;
     _loading = false;
     _finishedLoading = false;
-    notifyListeners();
   }
 
   bool get loading => _loading;

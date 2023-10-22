@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: HomeViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>())),
-        ChangeNotifierProvider.value(value: DetailsViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>()))
+        ChangeNotifierProvider(create:(_) => HomeViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>())),
+        ChangeNotifierProvider(create:(_) => DetailsViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>()))
       ],
       child: MaterialApp(
         navigatorKey: GlobalKeyHelper.navigatorKey,
