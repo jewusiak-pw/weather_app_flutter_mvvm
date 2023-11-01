@@ -7,6 +7,7 @@ import 'package:weather_app_flutter_mvvm/main.dart';
 import 'package:weather_app_flutter_mvvm/model/autocomplete_item.dart';
 import 'package:weather_app_flutter_mvvm/services/selected_city_service.dart';
 import 'package:weather_app_flutter_mvvm/view/details_view.dart';
+import 'package:weather_app_flutter_mvvm/view/todo_view.dart';
 
 class HomeViewModel extends ChangeNotifier {
   AutocompleteItem? _selectedOption;
@@ -61,6 +62,12 @@ class HomeViewModel extends ChangeNotifier {
     _selectedCityService.setCity(selectedOption);
     await Navigator.of(GlobalKeyHelper.navigatorKey.currentState!.context).push(MaterialPageRoute(
       builder: (context) => DetailsView(),
+    ));
+  }
+
+  Future todoPressedCommand() async {
+    await Navigator.of(GlobalKeyHelper.navigatorKey.currentState!.context).push(MaterialPageRoute(
+      builder: (context) => TodoView(),
     ));
   }
 }

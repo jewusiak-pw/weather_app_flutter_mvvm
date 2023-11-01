@@ -80,6 +80,13 @@ class HomeView extends StatelessWidget {
                   child: Text("Go!"),
                   onPressed: () async => await homeViewModel.goPressedCommand(),
                 ),
+                SizedBox(
+                  height: 350,
+                ),
+                ElevatedButton(
+                  child: Text("Todo ->"),
+                  onPressed: () async => await homeViewModel.todoPressedCommand(),
+                ),
               ],
             )),
       ),

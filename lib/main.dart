@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app_flutter_mvvm/model/todo_model.dart';
 import 'package:weather_app_flutter_mvvm/services/api_client.dart';
 import 'package:weather_app_flutter_mvvm/services/selected_city_service.dart';
+import 'package:weather_app_flutter_mvvm/services/todo_client.dart';
 import 'package:weather_app_flutter_mvvm/view/home_view.dart';
 import 'package:weather_app_flutter_mvvm/viewmodel/details_viewmodel.dart';
 import 'package:weather_app_flutter_mvvm/viewmodel/home_viewmodel.dart';
+import 'package:weather_app_flutter_mvvm/viewmodel/todo_viewmodel.dart';
 
 void main() {
   GetIt.I.registerSingleton(ApiClient());
   GetIt.I.registerSingleton(SelectedCityService());
+  GetIt.I.registerSingleton(TodoClient());
   runApp(const MyApp());
 }
 
@@ -21,7 +25,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create:(_) => HomeViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>())),
-        ChangeNotifierProvider(create:(_) => DetailsViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>()))
+        ChangeNotifierProvider(create:(_) => DetailsViewModel(GetIt.I.get<ApiClient>(), GetIt.I.get<SelectedCityService>())),
+        ChangeNotifierProvider(create:(_) => TodoViewModel(GetIt.I.get<TodoClient>()))
       ],
       child: MaterialApp(
         navigatorKey: GlobalKeyHelper.navigatorKey,
