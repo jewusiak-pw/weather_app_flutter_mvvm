@@ -12,7 +12,7 @@ class TodoClient {
 
   Future<ListsResponse> getLists(int? page) async {
     final params = {'size': '50', 'page': page.toString() ?? '0'};
-    var res = await makeGetRequest(Uri.https("${Constants.TODO_URL}", "/list")
+    var res = await makeGetRequest(Uri.parse("${Constants.TODO_URL}/list")
         .replace(queryParameters: params));
     var obj = ListsResponse.fromJson(decodeResponseBody(res));
     return obj;
@@ -20,30 +20,32 @@ class TodoClient {
 
   Future createList(String name) async {
     await makePostRequest(
-        Uri.https("${Constants.TODO_URL}", "/list"), {'name': name}, expc: 201);
+        Uri.parse("${Constants.TODO_URL}/list"), {'name': name},
+        expc: 201);
   }
 
   Future deleteList(String id) async {
-    await makeDeleteRequest(Uri.https("${Constants.TODO_URL}", "/list/$id"));
+    await makeDeleteRequest(Uri.parse("${Constants.TODO_URL}/list/$id"));
   }
 
   Future createItem(String name, String listUuid) async {
     var res = await makePostRequest(
-        Uri.https("${Constants.TODO_URL}", "/item"), {'name': name}, expc: 201);
+        Uri.parse("${Constants.TODO_URL}/item"), {'name': name},
+        expc: 201);
     var obj = TodoItem.fromJson(decodeResponseBody(res));
     await makePostRequest(
-        Uri.https(
-            "${Constants.TODO_URL}", "/item/${obj.uuid!}/setlist/$listUuid"),
+        Uri.parse("${Constants.TODO_URL}/item/${obj.uuid!}/setlist/$listUuid"),
         {});
   }
 
   Future setItemDone(String id, bool done) async {
-    await makePutRequest(
-        Uri.https("${Constants.TODO_URL}", "/item/$id"), {'status': done.toString()});
+    await makePutRequest(Uri.parse("${Constants.TODO_URL}/item/$id"),
+        {'status': done.toString()});
   }
-  
+
   Future deleteItem(String id) async {
-    var res = await makeDeleteRequest(Uri.https("${Constants.TODO_URL}", "/item/$id"));
+    var res =
+        await makeDeleteRequest(Uri.parse("${Constants.TODO_URL}/item/$id"));
     print("object");
   }
 
@@ -80,11 +82,11 @@ class TodoClient {
     return res;
   }
 
-  Future<http.Response> makePostRequest(
-      Uri uri, Map<String, dynamic> body, {expc = 200}) async {
+  Future<http.Response> makePostRequest(Uri uri, Map<String, dynamic> body,
+      {expc = 200}) async {
     var res = await http.post(uri, body: jsonEncode(body), headers: {
       'Content-Type': 'application/json',
-    } );
+    });
     if (res.statusCode != expc) {
       throw RequestFailureException(
           "Request POST $uri failed with ${res.statusCode}. Message: ${res.body}");
