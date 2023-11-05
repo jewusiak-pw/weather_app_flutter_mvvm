@@ -6,11 +6,15 @@ import 'package:weather_app_flutter_mvvm/exceptions/request_failure_exception.da
 import 'package:weather_app_flutter_mvvm/model/lists_response.dart';
 
 class TodoClient {
+  static dynamic decodeResponseBody(http.Response res) {
+    return jsonDecode(utf8.decode(res.bodyBytes));
+  }
+
   Future<ListsResponse> getLists(int? page) async {
     final params = {'size': '50', 'page': page.toString() ?? '0'};
     var res = await makeGetRequest(Uri.https("${Constants.TODO_URL}", "/list")
         .replace(queryParameters: params));
-    var obj = ListsResponse.fromJson(jsonDecode(res.body));
+    var obj = ListsResponse.fromJson(decodeResponseBody(res));
     return obj;
   }
 
@@ -26,7 +30,7 @@ class TodoClient {
   Future createItem(String name, String listUuid) async {
     var res = await makePostRequest(
         Uri.https("${Constants.TODO_URL}", "/item"), {'name': name}, expc: 201);
-    var obj = TodoItem.fromJson(jsonDecode(res.body));
+    var obj = TodoItem.fromJson(decodeResponseBody(res));
     await makePostRequest(
         Uri.https(
             "${Constants.TODO_URL}", "/item/${obj.uuid!}/setlist/$listUuid"),
